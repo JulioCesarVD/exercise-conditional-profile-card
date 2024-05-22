@@ -26,7 +26,7 @@ function render(variables = {}) {
   console.log("These are the current variables: ", variables); // print on the console
   // here we ask the logical questions to make decisions on how to build the html
   // if includeCover==false then we reset the cover code without the <img> tag to make the cover transparent.
-  let cover = `<div class="cover"><img src="${variables.background}" /></div>`;
+  let cover = `<div class="cover" style="background-image: url(${variables.background});" onclick="document.getElementById('background').click();"></div>`;
   if (variables.includeCover == false) cover = "<div class='cover'></div>";
 
   /*Nombre y rol*/
@@ -65,7 +65,9 @@ function render(variables = {}) {
   // reset the website body with the new html output
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
+          
           <img id="avatar" src="${variables.avatarURL}" class="photo" onclick="document.getElementById('avatarInput').click();" />
+          
           <h1>${displayName}</h1>
           <h2>${displayRole}</h2>
           <h3>${displayLocation}</h3>
@@ -133,15 +135,13 @@ window.onload = function() {
       reader.readAsDataURL(file);
     });
 
-  document
-    .getElementById("backgroundInput")
-    .addEventListener("change", function(e) {
-      const file2 = e.target.files[0];
-      const reader2 = new FileReader();
-      reader2.onload = function(event) {
-        window.variables.background = event.target.result;
-        render(window.variables);
-      };
-      reader2.readAsDataURL(file2);
-    });
+  document.getElementById("background").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      window.variables.background = event.target.result;
+      render(window.variables);
+    };
+    reader.readAsDataURL(file);
+  });
 };
