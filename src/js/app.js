@@ -65,7 +65,7 @@ function render(variables = {}) {
   // reset the website body with the new html output
   document.querySelector("#widget_content").innerHTML = `<div class="widget">
             ${cover}
-          <img src="${variables.avatarURL}" class="photo" />
+          <img id="avatar" src="${variables.avatarURL}" class="photo" onclick="document.getElementById('avatarInput').click();" />
           <h1>${displayName}</h1>
           <h2>${displayRole}</h2>
           <h3>${displayLocation}</h3>
@@ -121,4 +121,27 @@ window.onload = function() {
       render(Object.assign(window.variables, values)); // render again the card with new values
     });
   });
+  document
+    .getElementById("avatarInput")
+    .addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        window.variables.avatarURL = event.target.result;
+        render(window.variables);
+      };
+      reader.readAsDataURL(file);
+    });
+
+  document
+    .getElementById("backgroundInput")
+    .addEventListener("change", function(e) {
+      const file2 = e.target.files[0];
+      const reader2 = new FileReader();
+      reader2.onload = function(event) {
+        window.variables.background = event.target.result;
+        render(window.variables);
+      };
+      reader2.readAsDataURL(file2);
+    });
 };
